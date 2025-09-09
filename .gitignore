@@ -1,10 +1,7 @@
-# Python
 __pycache__/
 *.py[cod]
 *.egg-info/
 .venv/
 ipynb_checkpoints/
-# VS Code
 .vscode/
-# Mac
 .DS_Store

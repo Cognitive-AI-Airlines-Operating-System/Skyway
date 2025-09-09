@@ -1,2 +1,2 @@
-# Cognitive AI Airlines
-Week 1 demo: price prediction + budget destination recommender.
+# Skyway ✈️
+AI-powered airline operating system (mini project) - Week 1 demo.
