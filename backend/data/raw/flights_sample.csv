@@ -1,0 +1,5 @@
+airline,source,destination,departure_date,stops,duration_mins,days_to_dep,base_price
+Indigo,HYD,DEL,2025-10-15,0,120,40,4500
+AirIndia,HYD,BOM,2025-10-20,1,150,45,4200
+SpiceJet,BOM,GOI,2025-11-05,0,90,10,3200
+Vistara,DEL,HYD,2025-12-01,0,135,25,5000
