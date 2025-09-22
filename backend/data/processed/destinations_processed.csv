@@ -1,0 +1,5 @@
+city,country,region,avg_daily_cost,theme_beach,theme_culture,theme_adventure,best_months,cost_norm
+Goa,India,Asia,2500,1,0,1,"Nov,Dec,Jan",1.0
+Jaipur,India,Asia,1800,0,1,0,"Oct,Nov,Feb",0.0
+Manali,India,Asia,2000,0,0,1,"Dec,Jan,Feb",0.2857142857142856
+Goa2,India,Asia,2300,1,0,0,"Apr,May",0.714285714285714
