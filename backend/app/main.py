@@ -6,3 +6,6 @@ app = FastAPI(title="Skyway API")
 def health():
     return {"status": "ok"}
 
+
+from app.api import reco as reco_api
+app.include_router(reco_api.router, prefix="/api", tags=["recommender"])
