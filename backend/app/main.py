@@ -1,14 +1,23 @@
 from fastapi import FastAPI
-from backend.app.api import price as price_api  # <-- updated import
+from fastapi.middleware.cors import CORSMiddleware
+from .api import price, reco
 
-app = FastAPI()
+app = FastAPI(title="Skyway API", version="1.0")
 
-@app.get("/")
-def root():
-    return {"message": "Flight Price API is running"}
+# Allow frontend to connect
+origins = ["*"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
+# Register APIs
+app.include_router(price.router, prefix="/price", tags=["Price Prediction"])
+app.include_router(reco.router, prefix="/destination", tags=["Destination Recommender"])
 
-from app.api import reco as reco_api
-app.include_router(reco_api.router, prefix="/api", tags=["recommender"])
-# include the router
-app.include_router(price_api.router, prefix="/api", tags=["price"])
+@app.get("/health")
+def health():
+    return {"status": "ok"}
