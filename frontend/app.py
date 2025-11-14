@@ -1,26 +1,48 @@
 # frontend/app.py
 import streamlit as st
 import requests
+from datetime import date
 
+API_BASE = "http://localhost:8000"
 
-API_BASE = "http://localhost:8000/api"
+st.set_page_config(page_title="Skyway ✈️", layout="wide")
+st.title("Skyway – Smart Travel Assistant")
 
+# ------------------------
+# Flight Price Prediction
+# ------------------------
+st.header("✈️ Flight Price Prediction")
+st.write("Enter details to predict flight price")
 
-st.title("Skyway Week-1 Demo")
-
-# Price prediction UI omitted here — reuse your Week1 UI code
-st.header("Flight Price Predictor")
-
-airline = st.selectbox("Airline", ["Indigo", "Air India", "SpiceJet", "Vistara"])
-source = st.selectbox("Source", ["DEL", "HYD", "GOI", "BOM"])
-destination = st.selectbox("Destination", ["DEL", "GOI", "HYD", "BOM"])
-departure_date = st.date_input("Departure Date")
-stops = st.number_input("Number of Stops", min_value=0, max_value=3, value=0)
-duration_mins = st.number_input("Flight Duration (mins)", min_value=30, value=120)
-days_to_dep = st.number_input("Days to Departure", min_value=0, value=30)
+# Inputs
+st_cols = st.columns(3)
+with st_cols[0]:
+    stops = st.number_input("Number of stops", min_value=0, max_value=3, value=0)
+    duration_mins = st.number_input("Duration (mins)", min_value=30, value=120)
+with st_cols[1]:
+    days_to_dep = st.number_input("Days to departure", min_value=0, value=30)
+    departure_date = st.date_input("Departure Date", value=date.today())
+with st_cols[2]:
+    airline = st.selectbox("Airline", ["Indigo", "Air India", "SpiceJet", "Vistara"])
+    source = st.selectbox("Source", ["DEL", "HYD", "GOI", "BOM"])
+    destination = st.selectbox("Destination", ["DEL", "GOI", "HYD", "BOM"])
 
 if st.button("Predict Price"):
-    payload = {
+    # Build one-hot style payload (model might expect these columns)
+    def norm_key(s: str) -> str:
+        return s.replace(" ", "").replace("-", "").replace(".", "")
+
+    onehot_payload = {
+        "stops": int(stops),
+        "duration_mins": int(duration_mins),
+        "days_to_dep": int(days_to_dep),
+        f"airline_{norm_key(airline)}": 1,
+        f"source_{norm_key(source)}": 1,
+        f"destination_{norm_key(destination)}": 1
+    }
+
+    # Also prepare the original payload (safe fallback)
+    original_payload = {
         "airline": airline,
         "source": source,
         "destination": destination,
@@ -29,26 +51,72 @@ if st.button("Predict Price"):
         "duration_mins": int(duration_mins),
         "days_to_dep": int(days_to_dep)
     }
-    resp = requests.post(f"{API_BASE}/predict_price", json=payload, timeout=20)
-    if resp.ok:
-        price = resp.json().get("predicted_price")
-        st.success(f"Estimated Price: ₹{int(price)}")
+
+    # Try one-hot first, then fallback to original_payload
+    try:
+        resp = requests.post(f"{API_BASE}/price/predict_price", json=onehot_payload, timeout=15)
+    except Exception as e:
+        st.error(f"Network error when calling price API: {e}")
+        resp = None
+
+    # If one-hot failed (non-200), try original payload
+    if not resp or not resp.ok:
+        try:
+            resp2 = requests.post(f"{API_BASE}/price/predict_price", json=original_payload, timeout=15)
+        except Exception as e:
+            st.error(f"Network error when calling price API (fallback): {e}")
+            resp2 = None
+
+        if resp2 and resp2.ok:
+            try:
+                price = resp2.json().get("predicted_price")
+                st.success(f"Predicted Price: ₹{int(price)}")
+            except Exception:
+                st.error(f"Unexpected response: {resp2.status_code} {resp2.text}")
+        else:
+            code = resp2.status_code if resp2 else "no-response"
+            text = resp2.text if resp2 else ""
+            st.error(f"Error fetching prediction (fallback). Status: {code}. {text}")
     else:
-        st.error("Error calling price prediction API")
+        try:
+            price = resp.json().get("predicted_price")
+            st.success(f"Predicted Price: ₹{int(price)}")
+        except Exception:
+            st.error(f"Unexpected response: {resp.status_code} {resp.text}")
 
+# ------------------------
+# Budget Destination Recommender
+# ------------------------
+st.header("🌍 Budget Destination Recommender")
+st.write("Find destinations that fit your budget and preferences")
 
-st.header("Destination Recommender")
-budget = st.number_input("Budget (₹)", min_value=1000, value=20000)
-days = st.number_input("Trip days", min_value=1, value=5)
-prefs = st.multiselect("Preferences", ["beach","culture","adventure"], default=["culture"])
+col_a, col_b = st.columns(2)
+with col_a:
+    budget = st.number_input("Enter budget (INR)", min_value=1000, value=20000)
+    days = st.number_input("Trip days", min_value=1, value=5)
+with col_b:
+    # keep multiselect (more flexible) — backend accepts list of preferences
+    prefs = st.multiselect("Preferences", ["beach", "culture", "adventure"], default=["culture"])
 
-
-
-if st.button("Recommend"):
+if st.button("Recommend Destinations"):
     payload = {"budget_total": float(budget), "trip_days": int(days), "preferences": prefs}
-    resp = requests.post(f"{API_BASE}/recommend_destinations", json=payload, timeout=20)
-    if resp.ok:
-        for i, r in enumerate(resp.json(),1):
-            st.write(f"{i}. **{r['city']}**, cost: ₹{int(r['trip_cost'])}, best months: {r['best_months']}")
+    try:
+        resp = requests.post(f"{API_BASE}/destination/recommend_destinations", json=payload, timeout=20)
+    except Exception as e:
+        st.error(f"Network error when calling recommender API: {e}")
+        resp = None
+
+    if resp and resp.ok:
+        try:
+            results = resp.json()
+            if results:
+                # show as a table for clean view
+                st.table(results)
+            else:
+                st.info("No destinations found for the given budget/preferences.")
+        except Exception:
+            st.error(f"Unexpected response format: {resp.status_code} {resp.text}")
     else:
-        st.error("Error calling API")
+        code = resp.status_code if resp else "no-response"
+        text = resp.text if resp else ""
+        st.error(f"Error calling API: {code}. {text}")

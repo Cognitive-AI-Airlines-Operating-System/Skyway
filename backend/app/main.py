@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .api import price, reco
+from .api import price, reco  # Make sure __init__.py exists in api/
 
 app = FastAPI(title="Skyway API", version="1.0")
 
@@ -14,7 +14,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Register APIs
+# Register routers
 app.include_router(price.router, prefix="/price", tags=["Price Prediction"])
 app.include_router(reco.router, prefix="/destination", tags=["Destination Recommender"])
 
