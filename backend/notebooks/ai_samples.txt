@@ -1,0 +1,111 @@
+---
+Prompt: Suggest 3 travel destinations for Ravi who loves beach and relaxation and has a budget of 3000 INR. For each destination, give a one-line reason.
+Output (fallback):
+1. Goa — sandy beaches and budget stays suitable for ~3000 INR.
+2. Pondicherry — relaxed French Quarter + calm beaches for a mellow getaway.
+3. Rishikesh — adventure + riverside stays, good for budget travelers.
+
+---
+Prompt: Recommend exactly 3 travel destinations for Ravi who likes beach and relaxation with a budget of 3000 INR. Return exactly 3 lines in this format:
+1. Destination — one-line reason
+2. Destination — one-line reason
+3. Destination — one-line reason
+Output:
+1.
+
+---
+Prompt: Recommend exactly 3 travel destinations for Ravi who likes beach and relaxation with a budget of 3000 INR. Return exactly 3 lines in this format:
+1. Destination — one-line reason
+2. Destination — one-line reason
+3. Destination — one-line reason
+Output:
+1.
+
+---
+Prompt: Recommend exactly 3 travel destinations for Ravi who likes beach and relaxation with a budget of 3000 INR. Return exactly 3 lines in this format:
+1. Destination — one-line reason
+2. Destination — one-line reason
+3. Destination — one-line reason
+Output:
+1.
+
+---
+Prompt: Recommend exactly 3 travel destinations for Ravi who likes beach and relaxation with a budget of 3000 INR. Return exactly 3 lines in this format:
+1. Destination — one-line reason
+2. Destination — one-line reason
+3. Destination — one-line reason
+Output:
+1.
+
+---
+Source: local_sampled
+Prompt: Example output (this is an example showing the required format):
+1. Goa — golden beaches and budget-friendly shacks.
+2. Pondicherry — calm French Quarter and seaside promenades.
+3. Gokarna — peaceful beaches ideal for low-budget travelers.
+
+Now, for a traveler named Ravi who likes beach and relaxation with a budget of 3000 INR, provide EXACTLY 3 numbered lines in the same format as the example (no extra commentary):
+1.
+Output:
+Gokarna - a beautiful beach with a budget of 3000 INR - a peaceful beach with a budget of 3000 INR - a peaceful beach with a budget of 3000 INR - a peaceful beach with a budget of 3000 INR - a peaceful beach with a budget of 3000 INR - a peaceful beach with a budget of 3000 INR - a peaceful beach with a budget of 3000 INR - a peaceful beach with a budget of 3000 INR - a peaceful beach with a budget of 3000 INR - a peaceful beach with a budget of 3000 INR - a peaceful beach with a budget of 3000 INR - a peaceful beach with a budget of 3000 INR - a peaceful beach with a budget of 3000 INR -
+
+---
+Source: local_sampled
+Prompt: Example output (this is an example showing the required format):
+1. Goa — golden beaches and budget-friendly shacks.
+2. Pondicherry — calm French Quarter and seaside promenades.
+3. Gokarna — peaceful beaches ideal for low-budget travelers.
+
+Now, for a traveler named Ravi who likes beach and relaxation with a budget of 3000 INR, provide EXACTLY 3 numbered lines in the same format as the example (no extra commentary):
+1.
+Output:
+Gokarna - a quiet beach with a budget of 3000 INR, provide EXACTLY 3 numbered lines in the same format as the example (no extra commentary):
+
+---
+Source: local_sampled
+Prompt: Example output (this is an example showing the required format):
+1. Goa — golden beaches and budget-friendly shacks.
+2. Pondicherry — calm French Quarter and seaside promenades.
+3. Gokarna — peaceful beaches ideal for low-budget travelers.
+
+Now, for a traveler named Traveler who likes beach and culture with a budget of 3000 INR, provide EXACTLY 3 numbered lines in the same format as the example (no extra commentary):
+1.
+Output:
+Gokarna — beautiful beaches and shacks with a budget of 3000 INR, provide EXACTLY 3 numbered lines in the same format as the example (no extra commentary):
+
+---
+Source: local_sampled
+Prompt: Example output (this is an example showing the required format):
+1. Goa — golden beaches and budget-friendly shacks.
+2. Pondicherry — calm French Quarter and seaside promenades.
+3. Gokarna — peaceful beaches ideal for low-budget travelers.
+
+Now, for a traveler named Traveler who likes beach and culture with a budget of 3000 INR, provide EXACTLY 3 numbered lines in the same format as the example (no extra commentary):
+1.
+Output:
+Gokarna — a beautiful beach with a budget of 3000 INR, and a calm French Quarter and seaside promenades.
+
+---
+Source: local_sampled
+Prompt: Example output (this is an example showing the required format):
+1. Goa — golden beaches and budget-friendly shacks.
+2. Pondicherry — calm French Quarter and seaside promenades.
+3. Gokarna — peaceful beaches ideal for low-budget travelers.
+
+Now, for a traveler named Traveler who likes beach and culture with a budget of 3000 INR, provide EXACTLY 3 numbered lines in the same format as the example (no extra commentary):
+1.
+Output:
+Gokarna — a beautiful beach and culture with a budget of 3000 INR, provide EXACTLY 3 numbered lines in the same format as the example (no extra commentary):
+
+---
+Source: local_sampled
+Prompt: Example output (this is an example showing the required format):
+1. Goa — golden beaches and budget-friendly shacks.
+2. Pondicherry — calm French Quarter and seaside promenades.
+3. Gokarna — peaceful beaches ideal for low-budget travelers.
+
+Now, for a traveler named Ravi who likes beach and relaxation with a budget of 3000 INR, provide EXACTLY 3 numbered lines in the same format as the example (no extra commentary):
+1.
+Output:
+Gokarna – a beautiful beach with a budget of 3000 INR, and a peaceful beach for low-budget travelers.
+

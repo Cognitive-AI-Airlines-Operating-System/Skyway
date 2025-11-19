@@ -120,3 +120,51 @@ if st.button("Recommend Destinations"):
         code = resp.status_code if resp else "no-response"
         text = resp.text if resp else ""
         st.error(f"Error calling API: {code}. {text}")
+
+# ------------------------
+# Personalized Destination Discovery (AI)
+# ------------------------
+st.header("🤖 Personalized Destination Discovery (AI)")
+st.write("Get AI-powered travel suggestions based on your preferences")
+
+ai_name = st.text_input("Your name", "Traveler")
+ai_prefs = st.text_input("Tell the AI your preferences", "beach and culture")
+ai_budget = st.number_input("Budget (INR)", min_value=500, value=3000)
+
+# --- session state for disabling while running ---
+if "ai_running" not in st.session_state:
+    st.session_state.ai_running = False
+
+if st.button("Get AI Suggestions", disabled=st.session_state.ai_running):
+    # set running flag to True so button disables on next rerun
+    st.session_state.ai_running = True
+
+    payload = {"user_name": ai_name, "preferences": ai_prefs, "budget": float(ai_budget)}
+    with st.spinner("Getting AI suggestions..."):
+        try:
+            resp = requests.post(f"{API_BASE}/ai/personalized_discovery", json=payload, timeout=30)
+            if resp.ok:
+                data = resp.json()
+                recs = data.get("recommendations", [])
+                note = data.get("note")
+                cached_flag = data.get("cached", False)
+                if note:
+                    st.info("Server note: " + str(note))
+                if cached_flag:
+                    st.info("Returned from cache (fast).")
+                if recs:
+                    n = max(1, len(recs))
+                    cols = st.columns(n)
+                    for col, r in zip(cols, recs):
+                        with col:
+                            st.markdown(f"### {r.get('rank', '')}.")
+                            st.write(r.get('text', ''))
+                else:
+                    st.info("No AI recommendations returned.")
+            else:
+                st.error(f"AI error: {resp.status_code} {resp.text}")
+        except Exception as e:
+            st.error(f"Network error: {e}")
+        finally:
+            # reset running flag so the button becomes enabled again
+            st.session_state.ai_running = False
