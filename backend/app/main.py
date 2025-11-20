@@ -39,6 +39,10 @@ app.include_router(reco.router, prefix="/destination", tags=["Destination Recomm
 app.include_router(personalized_discovery.router, prefix="/ai", tags=["Personalized AI"])
 app.include_router(chatbot.router, prefix="/assistant", tags=["Chatbot"])  # ✅ new router added
 
+
+
+
+
 @app.get("/health")
 def health():
     return {"status": "ok"}
