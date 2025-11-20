@@ -3,7 +3,15 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
-from .api import price, reco, personalized_discovery, chatbot
+# ✅ use relative imports from the same package (backend.app)
+from .api import (
+    price,
+    reco,
+    personalized_discovery,
+    chatbot,
+    profile,   # new Block P router
+)
+
 
 # lifespan context manager replaces deprecated startup/shutdown events
 @asynccontextmanager
@@ -18,10 +26,11 @@ async def lifespan(app: FastAPI):
     # Shutdown logic (optional)
     # e.g., close DB connections, cleanup resources
 
+
 app = FastAPI(
     title="Skyway API",
     version="1.0",
-    lifespan=lifespan
+    lifespan=lifespan,
 )
 
 # Allow frontend to connect during development
@@ -38,7 +47,11 @@ app.add_middleware(
 app.include_router(price.router, prefix="/price", tags=["Price Prediction"])
 app.include_router(reco.router, prefix="/destination", tags=["Destination Recommender"])
 app.include_router(personalized_discovery.router, prefix="/ai", tags=["Personalized AI"])
-app.include_router(chatbot.router, prefix="/assistant", tags=["Chatbot"])  # ✅ new router added
+app.include_router(chatbot.router, prefix="/assistant", tags=["Chatbot"])
+
+# 🧱 Block P router (Profile)
+app.include_router(profile.router, prefix="/profile", tags=["Profile"])
+
 
 @app.get("/health")
 def health():
