@@ -168,3 +168,14 @@ if st.button("Get AI Suggestions", disabled=st.session_state.ai_running):
         finally:
             # reset running flag so the button becomes enabled again
             st.session_state.ai_running = False
+
+
+
+
+st.title("⚡ Streamlit AI Travel Suite")
+
+# Sidebar navigation
+section = st.sidebar.selectbox(
+    "Choose a tool",
+    ["Chatbot", "Packing Planner", "Health Alerts", "Disruption Simulator"]
+)
