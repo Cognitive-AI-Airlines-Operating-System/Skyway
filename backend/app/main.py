@@ -9,7 +9,8 @@ from .api import (
     reco,
     personalized_discovery,
     chatbot,
-    profile,   # new Block P router
+    profile,     # Block P – Profile router
+    itinerary,   # Itinerary router (relative import)
 )
 
 
@@ -48,6 +49,7 @@ app.include_router(price.router, prefix="/price", tags=["Price Prediction"])
 app.include_router(reco.router, prefix="/destination", tags=["Destination Recommender"])
 app.include_router(personalized_discovery.router, prefix="/ai", tags=["Personalized AI"])
 app.include_router(chatbot.router, prefix="/assistant", tags=["Chatbot"])
+app.include_router(itinerary.router, prefix="/ai", tags=["Itinerary"])
 
 # 🧱 Block P router (Profile)
 app.include_router(profile.router, prefix="/profile", tags=["Profile"])
