@@ -4,6 +4,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 
 from .api import price, reco, personalized_discovery, chatbot
+from .api import packing
+
 
 # lifespan context manager replaces deprecated startup/shutdown events
 @asynccontextmanager
@@ -39,6 +41,8 @@ app.include_router(price.router, prefix="/price", tags=["Price Prediction"])
 app.include_router(reco.router, prefix="/destination", tags=["Destination Recommender"])
 app.include_router(personalized_discovery.router, prefix="/ai", tags=["Personalized AI"])
 app.include_router(chatbot.router, prefix="/assistant", tags=["Chatbot"])  # ✅ new router added
+app.include_router(packing.router, prefix="/planner", tags=["Packing"])
+
 
 @app.get("/health")
 def health():
