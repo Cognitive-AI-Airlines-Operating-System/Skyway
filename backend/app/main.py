@@ -9,8 +9,9 @@ from .api import (
     reco,
     personalized_discovery,
     chatbot,
-    profile,     # Block P – Profile router
-    itinerary,   # Itinerary router (relative import)
+    profile,       # Block P – Profile router
+    itinerary,     # Itinerary router
+    carbon,        # ✅ NEW Carbon router imported here
 )
 
 
@@ -51,8 +52,9 @@ app.include_router(personalized_discovery.router, prefix="/ai", tags=["Personali
 app.include_router(chatbot.router, prefix="/assistant", tags=["Chatbot"])
 app.include_router(itinerary.router, prefix="/ai", tags=["Itinerary"])
 
-# 🧱 Block P router (Profile)
+# 🧱 Block P routers
 app.include_router(profile.router, prefix="/profile", tags=["Profile"])
+app.include_router(carbon.router, prefix="/ai", tags=["Carbon"])   # ✅ NEW Carbon endpoint added
 
 
 @app.get("/health")
