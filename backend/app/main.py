@@ -11,7 +11,8 @@ from .api import (
     chatbot,
     profile,       # Block P – Profile router
     itinerary,     # Itinerary router
-    carbon,        # ✅ NEW Carbon router imported here
+    carbon,        # Carbon router
+    savings,       # ✅ NEW Savings router
 )
 
 
@@ -22,11 +23,9 @@ async def lifespan(app: FastAPI):
     try:
         personalized_discovery.init_model()
     except Exception:
-        # init_model logs errors but does not raise
         pass
     yield
     # Shutdown logic (optional)
-    # e.g., close DB connections, cleanup resources
 
 
 app = FastAPI(
@@ -54,7 +53,8 @@ app.include_router(itinerary.router, prefix="/ai", tags=["Itinerary"])
 
 # 🧱 Block P routers
 app.include_router(profile.router, prefix="/profile", tags=["Profile"])
-app.include_router(carbon.router, prefix="/ai", tags=["Carbon"])   # ✅ NEW Carbon endpoint added
+app.include_router(carbon.router, prefix="/ai", tags=["Carbon"])
+app.include_router(savings.router, prefix="/ai", tags=["Savings"])   # ✅ NEW Savings endpoint added
 
 
 @app.get("/health")
