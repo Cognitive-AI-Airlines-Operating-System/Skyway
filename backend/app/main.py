@@ -19,6 +19,7 @@ from .api import (
     health_alerts,
     optimized_route,
     group_travel,
+    auth
 )
 
 
@@ -68,6 +69,10 @@ app.include_router(disruptions.router, prefix="/disruptions", tags=["Disruptions
 app.include_router(health_alerts.router, prefix="/alerts", tags=["Health"])
 app.include_router(optimized_route.router, prefix="/ai", tags=["Optimization"])
 app.include_router(group_travel.router, prefix="/groups", tags=["Group Travel"])
+
+
+
+app.include_router(auth.router, prefix="/auth", tags=["Auth"])
 
 
 
