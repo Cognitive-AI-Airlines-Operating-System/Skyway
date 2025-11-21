@@ -5,6 +5,13 @@ from datetime import date
 
 API_BASE = "http://localhost:8000"
 
+
+if "user_id" not in st.session_state:
+    st.session_state.user_id = None
+if "user_name" not in st.session_state:
+    st.session_state.user_name = ""
+
+
 st.set_page_config(page_title="Skyway ✈️", layout="wide")
 
 st.sidebar.title("Skyway Menu")
@@ -17,12 +24,59 @@ page = st.sidebar.selectbox("Go to", [
     "Profile",
 ])
 
+st.sidebar.markdown("---")
+if st.session_state.user_id:
+    st.sidebar.write(f"Logged in as **{st.session_state.user_name}**")
+else:
+    st.sidebar.write("Not logged in")
+
+
+
 # Then wrap your existing UI:
 st.title("Skyway – Cognitive AI Airline OS")
 
 if page == "Home":
     st.subheader("Welcome to Skyway")
     st.write("Use the sidebar to explore features.")
+
+
+elif page == "Home":
+    st.subheader("Welcome to Skyway")
+    st.write("Use the sidebar to explore features.")
+
+    # Login form
+    login_email = st.text_input("Email (Login)")
+    login_password = st.text_input("Password (Login)", type="password")
+    if st.button("Login"):
+        payload = {"email": login_email, "password": login_password}
+        resp = requests.post(f"{API_BASE}/auth/login", json=payload)
+        if resp.status_code == 200:
+            data = resp.json()
+            st.session_state.user_id = data["user_id"]
+            st.session_state.user_name = data["name"]
+            st.success(f"Logged in as {data['name']}")
+        else:
+            st.error(resp.json().get("detail", "Login failed"))
+
+    # Register form
+    reg_name = st.text_input("Name (Register)")
+    reg_email = st.text_input("Email (Register)")
+    reg_password = st.text_input("Password (Register)", type="password")
+    reg_home_airport = st.text_input("Home Airport", value="HYD")
+    if st.button("Register"):
+        payload = {
+            "name": reg_name,
+            "email": reg_email,
+            "password": reg_password,
+            "home_airport": reg_home_airport
+        }
+        resp = requests.post(f"{API_BASE}/auth/register", json=payload)
+        if resp.status_code == 200:
+            st.success("Registered successfully!")
+        else:
+            st.error(resp.json().get("detail", "Registration failed"))
+
+
 
 
 elif page == "Flights":
@@ -48,28 +102,28 @@ with st_cols[2]:
 
 if st.button("Predict Price"):
             # Build one-hot style payload (model might expect these columns)
-            def norm_key(s: str) -> str:
-                return s.replace(" ", "").replace("-", "").replace(".", "")
-        
-            onehot_payload = {
-                "stops": int(stops),
-                "duration_mins": int(duration_mins),
-                "days_to_dep": int(days_to_dep),
-                f"airline_{norm_key(airline)}": 1,
-                f"source_{norm_key(source)}": 1,
-                f"destination_{norm_key(destination)}": 1
-            }
-        
-            # Also prepare the original payload (safe fallback)
-            original_payload = {
-                "airline": airline,
-                "source": source,
-                "destination": destination,
-                "departure_date": str(departure_date),
-                "stops": int(stops),
-                "duration_mins": int(duration_mins),
-                "days_to_dep": int(days_to_dep)
-            }
+    def norm_key(s: str) -> str:
+        return s.replace(" ", "").replace("-", "").replace(".", "")
+
+    onehot_payload = {
+        "stops": int(stops),
+        "duration_mins": int(duration_mins),
+        "days_to_dep": int(days_to_dep),
+        f"airline_{norm_key(airline)}": 1,
+        f"source_{norm_key(source)}": 1,
+        f"destination_{norm_key(destination)}": 1
+    }
+
+    # Also prepare the original payload (safe fallback)
+    original_payload = {
+        "airline": airline,
+        "source": source,
+        "destination": destination,
+        "departure_date": str(departure_date),
+        "stops": int(stops),
+        "duration_mins": int(duration_mins),
+        "days_to_dep": int(days_to_dep)
+    }
         
 # Try one-hot first, then fallback to original_payload
 try:
