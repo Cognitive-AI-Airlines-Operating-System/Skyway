@@ -32,15 +32,7 @@ else:
 
 
 
-# Then wrap your existing UI:
-st.title("Skyway – Cognitive AI Airline OS")
-
 if page == "Home":
-    st.subheader("Welcome to Skyway")
-    st.write("Use the sidebar to explore features.")
-
-
-elif page == "Home":
     st.subheader("Welcome to Skyway")
     st.write("Use the sidebar to explore features.")
 
@@ -78,6 +70,12 @@ elif page == "Home":
 
 
 
+# Then wrap your existing UI:
+st.title("Skyway – Cognitive AI Airline OS")
+
+if page == "Home":
+    st.subheader("Welcome to Skyway")
+    st.write("Use the sidebar to explore features.")
 
 elif page == "Flights":
   # move flight price + carbon + disruptions UI here
@@ -366,3 +364,97 @@ elif page == "AI Tools":
 # )
 
 
+
+# ---------------- PROFILE PAGE ----------------
+elif page == "Profile":
+    st.subheader("👤 Profile Management")
+
+    # If not logged in
+    if not st.session_state.user_id:
+        st.warning("Please login to view or update your profile.")
+    else:
+        # Try to fetch profile info
+        try:
+            resp = requests.get(f"{API_BASE}/profile/{st.session_state.user_id}", timeout=10)
+            if resp.status_code == 200:
+                profile_data = resp.json()
+                st.success("Profile Info:")
+                st.table([profile_data])  # show profile in table
+            else:
+                st.error(resp.json().get("detail", "Profile not found"))
+        except Exception as e:
+            st.error(f"Error fetching profile: {e}")
+
+        st.markdown("### Update / Create Profile")
+        username = st.text_input("Name:", value=st.session_state.user_name)
+        email = st.text_input("Email:", value="")
+        home_airport = st.text_input("Home Airport:", value="HYD")
+        monthly_salary = st.number_input("Monthly Salary:", min_value=0.0, step=1000.0)
+        monthly_savings = st.number_input("Monthly Savings:", min_value=0.0, step=500.0)
+
+        if st.button("Save Profile"):
+            payload = {
+                "user_id": st.session_state.user_id,
+                "username": username,
+                "email": email,
+                "home_airport": home_airport,
+                "monthly_salary": monthly_salary,
+                "monthly_savings": monthly_savings
+            }
+            try:
+                resp = requests.post(f"{API_BASE}/profile/create", json=payload, timeout=10)
+                if resp.status_code == 200:
+                    st.success("Profile updated/created successfully!")
+                else:
+                    st.error(resp.json().get("detail", "Profile update failed"))
+            except Exception as e:
+                st.error(f"Error saving profile: {e}")
+
+
+# ---------------- GROUP TRAVEL PAGE ----------------
+elif page == "Group Travel":
+    st.subheader("👥 Group Travel")
+
+    if not st.session_state.user_id:
+        st.warning("Please login to create or view groups.")
+    else:
+        st.markdown("### Create Group")
+        group_name = st.text_input("Group Name")
+        trip_city = st.text_input("Trip City")
+        trip_start_date = st.date_input("Trip Start Date")
+        trip_end_date = st.date_input("Trip End Date")
+
+        if st.button("Create Group"):
+            payload = {
+                "name": group_name,
+                "trip_city": trip_city,
+                "trip_start_date": str(trip_start_date),
+                "trip_end_date": str(trip_end_date),
+                "owner_user_id": st.session_state.user_id
+            }
+            try:
+                resp = requests.post(f"{API_BASE}/groups/create", json=payload, timeout=10)
+                if resp.status_code == 200:
+                    data = resp.json()
+                    st.success(f"Group created successfully! Group ID: {data['group_id']}")
+                else:
+                    st.error(resp.json().get("detail", "Group creation failed"))
+            except Exception as e:
+                st.error(f"Error creating group: {e}")
+
+        st.markdown("### View Group")
+        view_group_id = st.number_input("Enter Group ID to View", min_value=1, step=1)
+
+        if st.button("Get Group Info"):
+            try:
+                resp = requests.get(f"{API_BASE}/groups/{view_group_id}", timeout=10)
+                if resp.status_code == 200:
+                    data = resp.json()
+                    st.success("Group Info:")
+                    st.table([data["group"]])
+                    st.write("Members:")
+                    st.table(data["members"])
+                else:
+                    st.error(resp.json().get("detail", "Group not found"))
+            except Exception as e:
+                st.error(f"Error fetching group: {e}")
