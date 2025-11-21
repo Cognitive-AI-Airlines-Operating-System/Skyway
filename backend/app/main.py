@@ -17,6 +17,8 @@ from .api import (
     packing,
     disruptions,
     health_alerts,
+    optimized_route,
+    group_travel,
 )
 
 
@@ -64,6 +66,9 @@ app.include_router(payments.router, prefix="/payments", tags=["Payments"])  # âœ
 app.include_router(packing.router, prefix="/planner", tags=["Packing"])
 app.include_router(disruptions.router, prefix="/disruptions", tags=["Disruptions"])
 app.include_router(health_alerts.router, prefix="/alerts", tags=["Health"])
+app.include_router(optimized_route.router, prefix="/ai", tags=["Optimization"])
+app.include_router(group_travel.router, prefix="/groups", tags=["Group Travel"])
+
 
 
 @app.get("/health")
