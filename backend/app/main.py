@@ -12,10 +12,13 @@ from .api import (
     profile,       # Block P – Profile router
     itinerary,     # Itinerary router
     carbon,        # Carbon router
-    savings,
+    savings,       # Savings router
+    payments,      # Payments router
     packing,
     disruptions,
-    health_alerts                        # ✅ NEW Savings router
+    health_alerts,
+    optimized_route,
+    group_travel,
 )
 
 
@@ -26,7 +29,7 @@ async def lifespan(app: FastAPI):
     try:
         personalized_discovery.init_model()
     except Exception:
-        
+        # Fail silently if model is not available yet
         pass
     yield
     # Shutdown logic (optional)
@@ -55,19 +58,16 @@ app.include_router(personalized_discovery.router, prefix="/ai", tags=["Personali
 app.include_router(chatbot.router, prefix="/assistant", tags=["Chatbot"])  # ✅ new router added
 app.include_router(itinerary.router, prefix="/ai", tags=["Itinerary"])
 
-
 # 🧱 Block P routers
 app.include_router(profile.router, prefix="/profile", tags=["Profile"])
 app.include_router(carbon.router, prefix="/ai", tags=["Carbon"])
-app.include_router(savings.router, prefix="/ai", tags=["Savings"])   # ✅ NEW Savings endpoint added
-
-
-
+app.include_router(savings.router, prefix="/ai", tags=["Savings"])
+app.include_router(payments.router, prefix="/payments", tags=["Payments"])  # ✅ Payments endpoint
 app.include_router(packing.router, prefix="/planner", tags=["Packing"])
 app.include_router(disruptions.router, prefix="/disruptions", tags=["Disruptions"])
 app.include_router(health_alerts.router, prefix="/alerts", tags=["Health"])
-
-
+app.include_router(optimized_route.router, prefix="/ai", tags=["Optimization"])
+app.include_router(group_travel.router, prefix="/groups", tags=["Group Travel"])
 
 
 
