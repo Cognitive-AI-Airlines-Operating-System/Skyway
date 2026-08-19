@@ -1092,9 +1092,13 @@ elif page == "Profile":
     )
     existing_themes = profile_data.get("themes", "culture") if profile_data else "culture"
     existing_budget = float(profile_data.get("usual_budget", 0)) if profile_data else 0.0
-    existing_trip_len = (
-        int(profile_data.get("trip_length_days", 1)) if profile_data else 1
-    )
+
+    # Clamp trip length to at least 1 so Streamlit doesn't crash (min_value=1).
+    raw_trip_len = profile_data.get("trip_length_days", 1) if profile_data else 1
+    try:
+        existing_trip_len = max(1, int(raw_trip_len or 1))
+    except (TypeError, ValueError):
+        existing_trip_len = 1
 
     st.markdown("#### Update / Create Profile")
 
