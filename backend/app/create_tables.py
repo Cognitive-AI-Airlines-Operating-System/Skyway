@@ -1,4 +1,3 @@
-# backend/app/create_tables.py
 from .db import get_conn
 
 def init_db():
@@ -7,13 +6,14 @@ def init_db():
     cur = conn.cursor()
 
     # ----------------------
-    # Existing Tables (Block P)
+    # Users table (with password)
     # ----------------------
     cur.execute("""
     CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT,
-      email TEXT,
+      email TEXT UNIQUE,
+      password TEXT,           -- store plain password for mini-project
       home_airport TEXT,
       monthly_salary REAL,
       monthly_savings REAL
@@ -32,10 +32,8 @@ def init_db():
     """)
 
     # ----------------------
-    # 🧱 NEW: Block R - Group Travel Tables
+    # Block R - Group Travel Tables
     # ----------------------
-
-    # Groups table
     cur.execute("""
     CREATE TABLE IF NOT EXISTS groups (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -47,7 +45,6 @@ def init_db():
     )
     """)
 
-    # Group members table
     cur.execute("""
     CREATE TABLE IF NOT EXISTS group_members (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -59,9 +56,6 @@ def init_db():
     )
     """)
 
-    # ----------------------
-    # Commit & Close
-    # ----------------------
     conn.commit()
     conn.close()
 
