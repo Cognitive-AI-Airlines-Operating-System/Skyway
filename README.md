@@ -1,6 +1,6 @@
 # ✈️ Skyway
 
-## Cognitive AI Airlines Operating System
+## Cognitive AI Airlines Operating System with Service Automation and Optimization
 
 Skyway is an AI-powered airline operating system designed to provide intelligent, personalized, and efficient travel experiences through artificial intelligence, machine learning, automation, and optimization.
 
